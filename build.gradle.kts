@@ -1,10 +1,12 @@
 plugins {
     kotlin("jvm") version "1.6.10"
     `maven-publish`
+
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
 group = "com.deltaclient"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -24,12 +26,29 @@ val sourcesJar by tasks.registering(Jar::class) {
 publishing {
     publications {
         register<MavenPublication>("mavenJava") {
-            groupId = "com.deltaclient"
-            artifactId = "ws-common"
-            version = "1.0-SNAPSHOT"
+            groupId = project.group.toString()
+            artifactId = rootProject.name
+            version = project.version.toString()
 
             from(components["java"])
             artifact(sourcesJar.get())
+        }
+    }
+}
+
+nexusPublishing {
+    repositories {
+        create("deltaNexus") {
+            nexusUrl.set(uri("https://nexus.deltaclient.com/repository/internal/"))
+            snapshotRepositoryUrl.set(uri("https://nexus.deltaclient.com/repository/internal/"))
+
+            useStaging.set(false)
+
+            val deltaNxUser: String by project
+            val deltaNxPass: String by project
+
+            username.set(deltaNxUser)
+            password.set(deltaNxPass)
         }
     }
 }
