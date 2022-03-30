@@ -1,7 +1,6 @@
 package com.deltaclient.socket.common.packet.user
 
 import com.deltaclient.socket.common.packet.IPacket
-import com.deltaclient.socket.common.packet.annotation.PacketMeta
 import java.nio.ByteBuffer
 
 enum class UserStatus {
@@ -11,7 +10,6 @@ enum class UserStatus {
     OFFLINE
 }
 
-@PacketMeta("c2s-update-user-status")
 data class C2SUpdateUserStatusPacket(val status: UserStatus) : IPacket {
     companion object {
         val SERIALIZER = serializer@{ it: C2SUpdateUserStatusPacket, buffer: ByteBuffer ->

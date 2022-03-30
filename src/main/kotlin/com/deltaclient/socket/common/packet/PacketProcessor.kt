@@ -1,16 +1,17 @@
 package com.deltaclient.socket.common.packet
 
-import com.deltaclient.socket.common.packet.annotation.PacketMeta
 import com.deltaclient.socket.common.packet.ext.Deserializer
 import com.deltaclient.socket.common.packet.ext.Serializer
 import com.deltaclient.socket.common.packet.group.*
 import com.deltaclient.socket.common.packet.user.*
 import com.deltaclient.socket.common.util.CryptoUtil
 import java.nio.ByteBuffer
+import kotlin.reflect.KClass
 
 @Suppress("unused")
 object PacketProcessor {
     private val classToId = hashMapOf<Class<*>, Long>()
+
     private val serializers: MutableMap<Long, (IPacket, ByteBuffer) -> ByteBuffer> = hashMapOf()
     private val deserializers: MutableMap<Long, (ByteBuffer) -> IPacket> = hashMapOf()
 
@@ -52,10 +53,6 @@ object PacketProcessor {
         registerDeserializer(S2CForceClosePacket.DESERIALIZER)
     }
 
-    // TODO:
-    //  We don't need the PacketMeta annotation at all do we?
-    //  Since we use the hash for packet ids we can just generate the hash with the class name
-
     fun serialize(packet: IPacket): ByteBuffer {
         val buffer = ByteBuffer.allocate(2048)
         val id = getId(packet::class.java)
@@ -67,6 +64,17 @@ object PacketProcessor {
     @Throws(MalformedPacketException::class)
     fun deserialize(data: ByteBuffer): IPacket {
         val packetId = data.long
+        val packetDeserializer = deserializers[packetId] ?: throw MalformedPacketException()
+        return packetDeserializer(data)
+    }
+
+    @Throws(MalformedPacketException::class)
+    fun <T : IPacket> deserialize(data: ByteBuffer, vararg accepting: KClass<T>): IPacket {
+        val packetId = data.long
+        if (accepting.none { getId(it.java) == packetId }) {
+            throw MalformedPacketException()
+        }
+
         val packetDeserializer = deserializers[packetId] ?: throw MalformedPacketException()
         return packetDeserializer(data)
     }
@@ -83,7 +91,7 @@ object PacketProcessor {
 
     private fun <T : IPacket> getId(packetClass: Class<T>): Long {
         return classToId.getOrPut(packetClass) {
-            return@getOrPut CryptoUtil.fnv(packetClass.getAnnotation(PacketMeta::class.java).name)
+            return@getOrPut CryptoUtil.fnv(packetClass.name)
         }
     }
 }

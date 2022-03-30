@@ -1,12 +1,10 @@
 package com.deltaclient.socket.common.packet.user
 
 import com.deltaclient.socket.common.packet.IPacket
-import com.deltaclient.socket.common.packet.annotation.PacketMeta
 import com.deltaclient.socket.common.packet.ext.getString
 import com.deltaclient.socket.common.packet.ext.putString
 import java.nio.ByteBuffer
 
-@PacketMeta("c2s-crash-report")
 data class C2SCrashReportPacket(val crashReport: String) : IPacket {
     companion object {
         val SERIALIZER = serializer@{ it: C2SCrashReportPacket, buffer: ByteBuffer ->
@@ -21,7 +19,6 @@ data class C2SCrashReportPacket(val crashReport: String) : IPacket {
     }
 }
 
-@PacketMeta("s2c-force-close")
 class S2CForceClosePacket : IPacket {
     companion object {
         val SERIALIZER = serializer@{ _: S2CForceClosePacket, buffer: ByteBuffer ->

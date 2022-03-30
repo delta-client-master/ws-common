@@ -1,7 +1,6 @@
 package com.deltaclient.socket.common.packet.user
 
 import com.deltaclient.socket.common.packet.IPacket
-import com.deltaclient.socket.common.packet.annotation.PacketMeta
 import com.deltaclient.socket.common.util.CryptoUtil
 import java.nio.ByteBuffer
 import java.security.PrivateKey
@@ -16,7 +15,6 @@ import javax.crypto.SecretKey
 
 // Client gets the server ID hash using the public key and an empty secret key and uses Mojang's Authlib to "join" the server
 
-@PacketMeta("s2c-verification-request")
 class S2CVerificationRequestPacket(val publicKey: PublicKey, val verifyToken: ByteArray) : IPacket {
     companion object {
         val SERIALIZER = serializer@{ it: S2CVerificationRequestPacket, buffer: ByteBuffer ->
@@ -48,7 +46,6 @@ class S2CVerificationRequestPacket(val publicKey: PublicKey, val verifyToken: By
 
 // SecretKey is AES
 @Suppress("unused")
-@PacketMeta("c2s-encryption-response")
 class C2SVerificationResponsePacket : IPacket {
     private val secretEncrypted: ByteArray
     private val verifyEncrypted: ByteArray

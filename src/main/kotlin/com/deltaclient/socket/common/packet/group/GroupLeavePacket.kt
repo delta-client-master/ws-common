@@ -1,11 +1,9 @@
 package com.deltaclient.socket.common.packet.group
 
 import com.deltaclient.socket.common.packet.IPacket
-import com.deltaclient.socket.common.packet.annotation.PacketMeta
 import java.nio.ByteBuffer
 import java.util.*
 
-@PacketMeta("c2s-group-leave")
 data class C2SGroupLeavePacket(val id: UUID) : IPacket {
     companion object {
         val SERIALIZER = serializer@{ it: C2SGroupLeavePacket, buffer: ByteBuffer ->
