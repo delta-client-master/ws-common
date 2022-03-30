@@ -69,9 +69,9 @@ object PacketProcessor {
     }
 
     @Throws(MalformedPacketException::class)
-    fun <T : IPacket> deserialize(data: ByteBuffer, vararg accepting: KClass<T>): IPacket {
+    fun deserialize(data: ByteBuffer, vararg accepted: KClass<*>): IPacket {
         val packetId = data.long
-        if (accepting.none { getId(it.java) == packetId }) {
+        if (accepted.none { getId(it.java) == packetId }) {
             throw MalformedPacketException()
         }
 
@@ -89,7 +89,7 @@ object PacketProcessor {
         deserializers[getId(T::class.java)] = fn as (ByteBuffer) -> IPacket
     }
 
-    private fun <T : IPacket> getId(packetClass: Class<T>): Long {
+    private fun getId(packetClass: Class<*>): Long {
         return classToId.getOrPut(packetClass) {
             return@getOrPut CryptoUtil.fnv(packetClass.name)
         }
