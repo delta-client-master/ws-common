@@ -18,15 +18,3 @@ data class C2SCrashReportPacket(val crashReport: String) : IPacket {
         }
     }
 }
-
-class S2CForceClosePacket : IPacket {
-    companion object {
-        val SERIALIZER = serializer@{ _: S2CForceClosePacket, buffer: ByteBuffer ->
-            return@serializer buffer
-        }
-
-        val DESERIALIZER = deserializer@{ _: ByteBuffer ->
-            return@deserializer S2CForceClosePacket()
-        }
-    }
-}

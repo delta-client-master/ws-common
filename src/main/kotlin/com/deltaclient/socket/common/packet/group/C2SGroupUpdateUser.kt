@@ -1,12 +1,9 @@
 package com.deltaclient.socket.common.packet.group
 
+import com.deltaclient.socket.common.model.GroupUpdateType
 import com.deltaclient.socket.common.packet.IPacket
 import java.nio.ByteBuffer
 import java.util.*
-
-enum class GroupUpdateType {
-    INVITE, KICK
-}
 
 data class C2SGroupUpdateUser(val id: UUID, val type: GroupUpdateType) : IPacket {
     companion object {
@@ -17,7 +14,7 @@ data class C2SGroupUpdateUser(val id: UUID, val type: GroupUpdateType) : IPacket
             return@serializer buffer
         }
 
-        val DESERIALIZER = deserializer@{it: ByteBuffer ->
+        val DESERIALIZER = deserializer@{ it: ByteBuffer ->
             val uuid = UUID(it.long, it.long)
             val type = GroupUpdateType.values()[it.int]
             return@deserializer C2SGroupUpdateUser(uuid, type)

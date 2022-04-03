@@ -1,5 +1,6 @@
 package com.deltaclient.socket.common.packet
 
+import com.deltaclient.socket.common.packet.exception.MalformedPacketException
 import com.deltaclient.socket.common.packet.ext.Deserializer
 import com.deltaclient.socket.common.packet.ext.Serializer
 import com.deltaclient.socket.common.packet.group.*
