@@ -1,0 +1,5 @@
+pipeline:
+  build:
+    image: gradle:7.4.2-jdk17
+    commands:
+      - gradle build

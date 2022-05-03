@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "1.6.21"
     `maven-publish`
 
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
@@ -7,6 +7,7 @@ plugins {
 
 group = "com.deltaclient"
 version = "1.2"
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
@@ -16,6 +17,13 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.mojang:authlib:1.5.21")
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "17"
+    }
 }
 
 val sourcesJar by tasks.registering(Jar::class) {
