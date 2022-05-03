@@ -9,4 +9,5 @@ pipeline:
     commands:
       - gradle publish
     secrets: [ delta_nx_user, delta_nx_pass ]
-    branches: [ main ]
+    when:
+      branch: main
