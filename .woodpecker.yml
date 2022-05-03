@@ -3,3 +3,10 @@ pipeline:
     image: gradle:7.4.2-jdk17
     commands:
       - gradle build
+
+  deploy:
+    image: gradle:7.4.2-jdk17
+    commands:
+      - gradle publish
+    secrets: [ delta_nx_user, delta_nx_pass ]
+    branches: [ main ]

@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.deltaclient"
-version = "1.2"
+version = "1.2.1"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
@@ -52,8 +52,8 @@ nexusPublishing {
 
             useStaging.set(false)
 
-            val deltaNxUser: String by project
-            val deltaNxPass: String by project
+            val deltaNxUser = System.getenv("DELTA_NX_USER")
+            val deltaNxPass = System.getenv("DELTA_NX_PASS")
 
             username.set(deltaNxUser)
             password.set(deltaNxPass)
